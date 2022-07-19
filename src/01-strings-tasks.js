@@ -200,30 +200,12 @@ function extractEmails(str) {
  */
 function getRectangleString(width, height) {
   let out = '';
-  let first = '┌';
-  let last = '┐';
-  let fill = '─';
-  for (let row = 0; row < height; row += 1) {
-    if (row === height - 1) {
-      first = '└';
-      last = '┘';
-      fill = '─';
-    } else if (row > 0) {
-      first = '│';
-      last = '│';
-      fill = ' ';
-    }
 
-    for (let symbol = 0; symbol < width; symbol += 1) {
-      if (symbol === 0) {
-        out += first;
-      } else if (symbol === width - 1) {
-        out += `${last}\n`;
-      } else {
-        out += fill;
-      }
-    }
-  }
+  out += `┌${'─'.repeat(width - 2)}┐\n`;
+
+  out += `│${' '.repeat(width - 2)}│\n`.repeat(height - 2);
+
+  out += `└${'─'.repeat(width - 2)}┘\n`;
 
   return out;
 }
