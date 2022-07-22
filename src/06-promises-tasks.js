@@ -99,18 +99,11 @@ function getFastestPromise(array) {
  *
  */
 function chainPromises(array, action) {
-  async function allS(promisesArray) {
-    const arr = [];
-
-    promisesArray.forEach(async (promise) => {
-      const response = await promise;
-      arr.push(response);
-    });
-
-    return arr;
-  }
-
-  return allS(array).then((arr) => arr.reduce(action));
+  class Fake extends Promise {}
+  return Fake.allSettled(array).then((arr) => arr
+    .filter((promise) => promise.status === 'fulfilled')
+    .map((promise) => promise.value)
+    .reduce(action));
 }
 
 module.exports = {
