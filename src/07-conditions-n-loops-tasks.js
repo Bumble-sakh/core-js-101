@@ -386,8 +386,20 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const paths = pathes.map((path) => path
+    .split('/')
+    .filter((dir) => !dir.includes('.')));
+
+  let result = '';
+  for (let dir = 0; dir < paths[0].length; dir += 1) {
+    for (let path = 1; path < paths.length; path += 1) {
+      if (paths[0][dir] !== paths[path][dir]) return result;
+    }
+    result += `${paths[0][dir]}/`;
+  }
+
+  return result;
 }
 
 /**
@@ -408,8 +420,20 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const result = [];
+
+  for (let row1 = 0; row1 < m1.length; row1 += 1) result[row1] = [];
+
+  for (let col2 = 0; col2 < m2[0].length; col2 += 1) {
+    for (let row1 = 0; row1 < m1.length; row1 += 1) {
+      let sum = 0;
+      for (let row2 = 0; row2 < m2.length; row2 += 1) sum += m1[row1][row2] * m2[row2][col2];
+      result[row1][col2] = sum;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -442,8 +466,36 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  const players = {
+    X: [],
+    0: [],
+  };
+
+  position.forEach((row, idxRow) => {
+    row.forEach((cell, idxCell) => {
+      if (cell !== undefined) players[cell].push(3 * idxRow + idxCell);
+    });
+  });
+
+  let result;
+
+  winningCombinations.forEach((combination) => {
+    if (combination.every((num) => players.X.includes(num))) result = 'X';
+    if (combination.every((num) => players[0].includes(num))) result = '0';
+  });
+
+  return result;
 }
 
 module.exports = {
